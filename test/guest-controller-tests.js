@@ -1,6 +1,6 @@
 var Controller = require('../controllers/guest-controller');
 var Guest = require('../models/guest-model');
-require('should');
+var should = require('should');
 
 var clear = function (done) {
     Guest.collection.remove(done);
@@ -65,6 +65,23 @@ describe('Guest Controller', function () {
                 emailAddress: 'email@email.com'
             }).addGuest(function () {
                 done();
+            });
+        });
+
+        it('should not add two guests with the same email', function (done) {
+            new Controller({
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com'
+            }).addGuest(function () {
+                new Controller({
+                    firstName: 'first',
+                    lastNmae: 'last',
+                    emailAddress: 'email@email.com'
+                }).addGuest(function (err) {
+                    should.exist(err);
+                    done();
+                });
             });
         });
     });

@@ -13,5 +13,16 @@ describe('API', function () {
                 .post('/guest')
                 .expect(500, done);
         });
+
+        it('responds with 200 when passing valid first name, last name and email', function (done) {
+            request(server)
+                .post('/guest')
+                .send({
+                    first_name: 'first',
+                    last_name: 'last',
+                    email_address: 'email@email.com'
+                })
+                .expect(200, done);
+        });
     });
 });

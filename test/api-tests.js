@@ -4,7 +4,11 @@ var express = require('express');
 var server = express();
 server.use(express.bodyParser());
 var routes = require('../routes')(server);
+var Guest = require('../models/guest-model');
 
+var clear = function (done) {
+    Guest.collection.remove(done);
+};
 
 describe('API', function () {
     describe('/guest POST', function () {
@@ -18,11 +22,11 @@ describe('API', function () {
             request(server)
                 .post('/guest')
                 .send({
-                    first_name: 'first',
-                    last_name: 'last',
-                    email_address: 'email@email.com'
+                    firstName: 'first',
+                    lastName: 'last',
+                    emailAddress: 'email@email.com'
                 })
-                .expect(200, done);
+                .expect(200, clear(done));
         });
     });
 });

@@ -1,4 +1,5 @@
 var email = require('../helpers/email');
+var Guest = require('../models/guest-model');
 
 /**
  * The Guest Controller
@@ -13,22 +14,22 @@ var GuestController = function (params) {
  * @return {Bool or String} Returns false if invalid, otherwise returns a string
  */
 GuestController.prototype.validate = function () {
-    if(typeof this.params.first_name === 'undefined' ||
-        this.params.first_name.length === 0) {
+    if(typeof this.params.firstName === 'undefined' ||
+        this.params.firstName.length === 0) {
         return 'Must specifiy a first name';
     }
 
-    if(typeof this.params.last_name === 'undefined' ||
-        this.params.last_name.length === 0) {
+    if(typeof this.params.lastName === 'undefined' ||
+        this.params.lastName.length === 0) {
         return 'Must specify a last name';
     }
 
-    if(typeof this.params.email_address === 'undefined' ||
-        this.params.email_address.length === 0) {
+    if(typeof this.params.emailAddress === 'undefined' ||
+        this.params.emailAddress.length === 0) {
         return 'Must specify an email address';
     }
 
-    if(!email.validate(this.params.email_address)) {
+    if(!email.validate(this.params.emailAddress)) {
         return 'Invalid email';
     }
 
@@ -41,6 +42,14 @@ GuestController.prototype.validate = function () {
  */
 GuestController.prototype.isValid = function () {
     return !this.validate();
+};
+
+/**
+ * Add guest
+ */
+GuestController.prototype.addGuest = function (cb) {
+    var guest = new Guest(this.params);
+    return guest.save(cb);
 };
 
 module.exports = GuestController;

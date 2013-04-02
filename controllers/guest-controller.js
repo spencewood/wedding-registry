@@ -13,8 +13,6 @@ var GuestController = function (params) {
  * @return {Bool or String} Returns false if invalid, otherwise returns a string
  */
 GuestController.prototype.validate = function () {
-    var valid = false;
-
     if(typeof this.params.first_name === 'undefined' ||
         this.params.first_name.length === 0) {
         return 'Must specifiy a first name';
@@ -34,7 +32,15 @@ GuestController.prototype.validate = function () {
         return 'Invalid email';
     }
 
-    return valid;
+    return false;
+};
+
+/**
+ * Returns boolean on whether the passed in parameters are valid
+ * @return {Boolean}
+ */
+GuestController.prototype.isValid = function () {
+    return !this.validate();
 };
 
 module.exports = GuestController;

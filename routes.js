@@ -5,9 +5,9 @@ var routes = function (server) {
      * Guest
      */
     server.post('/guest', function (req, res) {
-        if(typeof req.body.first_name !== 'undefined' &&
-            typeof req.body.first_name !== 'undefined' &&
-            typeof req.body.email_address !== 'undefined') {
+        var controller = new GuestController(req.body);
+
+        if(controller.isValid()) {
             res.send(200);
         }
 

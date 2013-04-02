@@ -1,5 +1,5 @@
 var email = require('../helpers/email');
-var should = require('should');
+require('should');
 
 describe('Email', function () {
     it('should validate "test@gmail.com" as true', function () {
@@ -16,5 +16,9 @@ describe('Email', function () {
 
     it('should validate "test@..com" as false', function () {
         email.validate('test@..com').should.be.false;
+    });
+
+    it('should validate "" as false', function () {
+        email.validate('').should.be.false;
     });
 });

@@ -8,7 +8,10 @@ var routes = function (server) {
         var controller = new Guest(req.body);
 
         //check if the referer is correct and if the passed in params are correct
-        if(/bethandtyler\.com/.test(req.header('Referer')) && controller.isValid()) {
+        if(! /bethandtyler\.com/.test(req.header('Referer'))){
+            res.send(500, 'Cannot save from ' + req.header('Referer'));
+        }
+        else if(controller.isValid()) {
             try{
                 controller.addGuest(function (err) {
                     if(err !== null){

@@ -1,6 +1,16 @@
 var Guest = require('./controllers/guest-controller');
+var config = require('./config');
 
 var routes = function (server) {
+    /**
+     * Cross-origin for all calls
+     */
+    server.all('/*', function(req, res, next) {
+        res.header('Access-Control-Allow-Origin', config.allowedDomains);
+        res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+        next();
+    });
+
     /**
      * Guest
      */

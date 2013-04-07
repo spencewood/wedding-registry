@@ -9,9 +9,15 @@ module.exports = {
             process.env.MONGOHQ_URL ||
             'mongodb://localhost/WeddingRegistry'
     },
+
     /**
      * Date which registration ends
      * @type {Date}
      */
-    cutOffDate: new Date('07/04/2013 11:59:59 PM CDT')
+    cutOffDate: new Date('07/04/2013 11:59:59 PM CDT'),
+
+    /**
+     * Cross-origin allowed domains
+     */
+    allowedDomains: 'http://localhost:4000'
 };

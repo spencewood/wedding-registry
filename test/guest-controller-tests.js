@@ -86,6 +86,20 @@ describe('Guest Controller', function () {
                 done();
             });
         });
+
+        it('should take and save the optional additionalCount parameter', function (done) {
+            new Controller({
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com',
+                additionalCount: 3
+            }).addGuest(function () {
+                Guest.findOne({emailAddress: 'email@email.com'}, function (err, guest) {
+                    guest.additionalCount.should.equal(3);
+                    done();
+                });
+            });
+        });
     });
 
     describe('canStillRegister', function () {

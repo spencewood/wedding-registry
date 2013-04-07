@@ -17,6 +17,10 @@ var schema = new mongoose.Schema({
         type: String,
         unique: true,
         trim: true
+    },
+    additionalCount: {
+        type: Number,
+        default: 0
     }
 });
 

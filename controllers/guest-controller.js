@@ -1,5 +1,6 @@
 var email = require('../helpers/email');
 var Guest = require('../models/guest-model');
+var config = require('../config');
 
 /**
  * The Guest Controller
@@ -41,15 +42,28 @@ GuestController.prototype.validate = function () {
  * @return {Boolean}
  */
 GuestController.prototype.isValid = function () {
-    return !this.validate();
+    return !this.validate() && GuestController.canStillRegister();
 };
 
 /**
  * Add guest
+ * @return {guest} The added guest
  */
 GuestController.prototype.addGuest = function (cb) {
-    var guest = new Guest(this.params);
-    return guest.save(cb);
+    if(this.isValid()){
+        var guest = new Guest(this.params);
+        return guest.save(cb);
+    }
+    //if we are this far, the caller should know
+    throw new Error('Invalid');
+};
+
+/**
+ * Whether the cutoff time has been reached for RSVP
+ * @return {Boolean}
+ */
+GuestController.canStillRegister = function () {
+    return Date.now() <= config.cutOffDate.getTime();
 };
 
 module.exports = GuestController;

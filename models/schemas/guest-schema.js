@@ -1,11 +1,22 @@
 var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
+    registeredDate: {
+        type: Date,
+        default: Date.now
+    },
+    firstName: {
+        type: String,
+        trim: true
+    },
+    lastName: {
+        type: String,
+        trim: true
+    },
     emailAddress: {
         type: String,
-        unique: true
+        unique: true,
+        trim: true
     }
 });
 

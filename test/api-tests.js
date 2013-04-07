@@ -1,4 +1,5 @@
 require('should');
+var sinon = require('sinon');
 var request = require('supertest');
 var express = require('express');
 var server = express();
@@ -12,6 +13,14 @@ var clear = function (done) {
 
 describe('API', function () {
     describe('/guest POST', function () {
+        beforeEach(function (done) {
+            clear(done);
+        });
+
+        after(function (done) {
+            clear(done);
+        });
+
         it('should respond with 500 when not posting valid parameters', function (done) {
             request(server)
                 .post('/guest')
@@ -19,24 +28,21 @@ describe('API', function () {
         });
 
         it('should respond with 500 when passing validation but failing database entry', function (done) {
-            //enter the same guest twice into db
-            request(server)
-                .post('/guest')
-                .send({
-                    firstName: 'first',
-                    lastName: 'last',
-                    emailAddress: 'email@email.com'
-                });
+            //enter the same guest details twice
+            var details = {
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com'
+            };
 
-            request(server)
-                .post('/guest')
-                .send({
-                    firstName: 'first',
-                    lastName: 'last',
-                    emailAddress: 'email@email.com'
-                })
-                .expect(500, clear(done));
+            var guest = new Guest(details);
 
+            guest.save(function () {
+                request(server)
+                    .post('/guest')
+                    .send(details)
+                    .expect(500, done);
+            });
         });
 
         it('should respond with 200 when passing valid first name, last name and email', function (done) {
@@ -47,7 +53,23 @@ describe('API', function () {
                     lastName: 'last',
                     emailAddress: 'email@email.com'
                 })
-                .expect(200, clear(done));
+                .expect(200, done);
+        });
+
+        it('should fail if registering late', function (done) {
+            var clock = sinon.useFakeTimers(new Date('07/07/2013').getTime());
+            request(server)
+                .post('/guest')
+                .send({
+                    firstName: 'first',
+                    lastName: 'last',
+                    emailAddress: 'email@email.com'
+                })
+                .end(function (err, res) {
+                    res.status.should.equal(500);
+                    clock.restore();
+                    done();
+                });
         });
     });
 });

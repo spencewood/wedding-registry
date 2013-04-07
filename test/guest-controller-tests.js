@@ -1,6 +1,8 @@
 var Controller = require('../controllers/guest-controller');
 var Guest = require('../models/guest-model');
 var should = require('should');
+var sinon = require('sinon');
+var config = require('../config');
 
 var clear = function (done) {
     Guest.collection.remove(done);
@@ -74,15 +76,53 @@ describe('Guest Controller', function () {
                 lastName: 'last',
                 emailAddress: 'email@email.com'
             }).addGuest(function () {
-                new Controller({
-                    firstName: 'first',
-                    lastNmae: 'last',
-                    emailAddress: 'email@email.com'
-                }).addGuest(function (err) {
-                    should.exist(err);
-                    done();
-                });
+                (function () {
+                    new Controller({
+                        firstName: 'first',
+                        lastNmae: 'last',
+                        emailAddress: 'email@email.com'
+                    }).addGuest();
+                }).should.throw();
+                done();
             });
+        });
+    });
+
+    describe('canStillRegister', function () {
+        it('should be true if the date is sometime in April', function () {
+            var clock = sinon.useFakeTimers(new Date('04/10/2013').getTime());
+            Controller.canStillRegister().should.be.true;
+            clock.restore();
+        });
+
+        it('should be true if the date is sometime in May', function () {
+            var clock = sinon.useFakeTimers(new Date('05/10/2013').getTime());
+            Controller.canStillRegister().should.be.true;
+            clock.restore();
+        });
+
+        it('should be true if the date is sometime in June', function () {
+            var clock = sinon.useFakeTimers(new Date('06/10/2013').getTime());
+            Controller.canStillRegister().should.be.true;
+            clock.restore();
+        });
+
+        it('should be true in early July', function (){
+            var clock = sinon.useFakeTimers(new Date('07/03/2013').getTime());
+            Controller.canStillRegister().should.be.true;
+            clock.restore();
+        });
+
+        it('should be true on the exact time of registration end', function () {
+            var clock = sinon.useFakeTimers(config.cutOffDate.getTime());
+            Controller.canStillRegister().should.be.true;
+            clock.restore();
+        });
+
+        it('should be false any time after the cut off time', function () {
+            var clock = sinon.useFakeTimers(new Date('07/07/2013').getTime());
+            Controller.canStillRegister().should.be.false;
+            clock.restore();
         });
     });
 });

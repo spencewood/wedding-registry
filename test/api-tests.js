@@ -24,6 +24,7 @@ describe('API', function () {
         it('should respond with 500 when not posting valid parameters', function (done) {
             request(server)
                 .post('/guest')
+                .set('Referer', 'http://www.bethandtyler.com')
                 .expect(500, done);
         });
 
@@ -40,6 +41,7 @@ describe('API', function () {
             guest.save(function () {
                 request(server)
                     .post('/guest')
+                    .set('Referer', 'http://www.bethandtyler.com')
                     .send(details)
                     .expect(500, done);
             });
@@ -48,6 +50,7 @@ describe('API', function () {
         it('should respond with 200 when passing valid first name, last name and email', function (done) {
             request(server)
                 .post('/guest')
+                .set('Referer', 'http://www.bethandtyler.com')
                 .send({
                     firstName: 'first',
                     lastName: 'last',
@@ -60,6 +63,7 @@ describe('API', function () {
             var clock = sinon.useFakeTimers(new Date('07/07/2013').getTime());
             request(server)
                 .post('/guest')
+                .set('Referer', 'http://www.bethandtyler.com')
                 .send({
                     firstName: 'first',
                     lastName: 'last',
@@ -70,6 +74,17 @@ describe('API', function () {
                     clock.restore();
                     done();
                 });
+        });
+
+        it('should fail if referer doesn\'t match bethandtyler.com', function (done) {
+            request(server)
+                .post('/guest')
+                .send({
+                    firstName: 'first',
+                    lastName: 'last',
+                    emailAddress: 'email@email.com'
+                })
+                .expect(500, done);
         });
     });
 });

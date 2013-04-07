@@ -7,15 +7,24 @@ var routes = function (server) {
     server.post('/guest', function (req, res) {
         var controller = new Guest(req.body);
 
-        if(controller.isValid()) {
-            controller.addGuest(function (err) {
-                if(err !== null){
-                    res.send(500, err);
-                }
-                res.send(200);
-            });
+        //check if the referer is correct and if the passed in params are correct
+        if(/bethandtyler\.com/.test(req.header('Referer')) && controller.isValid()) {
+            try{
+                controller.addGuest(function (err) {
+                    if(err !== null){
+                        //there is some error with saving, like duplicate entry
+                        res.send(500, err);
+                    }
+                    //successful entry
+                    res.send(200);
+                });
+            }catch(e){
+                //an error has happened with saving to the database, like model validation
+                res.send(500, 'Error saving record');
+            }
         }
         else{
+            //parameters not valid
             res.send(500, 'Incorrect parameters');
         }
     });

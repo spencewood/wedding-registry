@@ -19,5 +19,9 @@ module.exports = {
     /**
      * Cross-origin allowed domains
      */
-    allowedDomains: 'http://localhost:4000'
+    allowedDomains: [
+        'http://localhost:4000',
+        'http://bethandtyler.com',
+        'http://www.bethandtyler.com'
+    ]
 };

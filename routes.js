@@ -6,7 +6,9 @@ var routes = function (server) {
      * Cross-origin for all calls
      */
     server.all('/*', function(req, res, next) {
-        res.header('Access-Control-Allow-Origin', config.allowedDomains);
+        config.allowedDomains.forEach(function (domain) {
+            res.header('Access-Control-Allow-Origin', domain);
+        });
         res.header('Access-Control-Allow-Headers', 'X-Requested-With');
         next();
     });
@@ -18,7 +20,7 @@ var routes = function (server) {
         var controller = new Guest(req.body);
 
         //check if the referer is correct and if the passed in params are correct
-        if(! /bethandtyler\.com/.test(req.header('Referer'))){
+        if(config.allowedDomains.indexOf(req.header('Referer')) === -1){
             res.send(500, 'Cannot save from ' + req.header('Referer'));
         }
         else if(controller.isValid()) {

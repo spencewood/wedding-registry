@@ -112,6 +112,20 @@ describe('Guest Controller', function () {
                 done();
             });
         });
+
+        it('should take and save the optional message parameter', function (done) {
+            new Controller({
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com',
+                message: 'Horay!'
+            }).addGuest(function () {
+                Guest.findOne({emailAddress: 'email@email.com'}, function (err, guest) {
+                    guest.message.should.equal('Horay!');
+                    done();
+                });
+            });
+        });
     });
 
     describe('canStillRegister', function () {

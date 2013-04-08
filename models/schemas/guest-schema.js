@@ -22,7 +22,8 @@ var schema = new mongoose.Schema({
         type: Number,
         default: 0,
         max: 7
-    }
+    },
+    message: String
 });
 
 module.exports = schema;

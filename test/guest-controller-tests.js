@@ -100,6 +100,18 @@ describe('Guest Controller', function () {
                 });
             });
         });
+
+        it('should not let you have too many guests', function (done) {
+            new Controller({
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com',
+                additionalCount: 10
+            }).addGuest(function (err) {
+                should.exist(err);
+                done();
+            });
+        });
     });
 
     describe('canStillRegister', function () {

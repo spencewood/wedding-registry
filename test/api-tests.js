@@ -76,7 +76,7 @@ describe('API', function () {
                 });
         });
 
-        it('should fail if referer doesn\'t match bethandtyler.com', function (done) {
+        it('should fail if referer doesn\'t match a whitelisted domain', function (done) {
             request(server)
                 .post('/guest')
                 .send({

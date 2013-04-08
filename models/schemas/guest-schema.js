@@ -20,7 +20,8 @@ var schema = new mongoose.Schema({
     },
     additionalCount: {
         type: Number,
-        default: 0
+        default: 0,
+        max: 7
     }
 });
 

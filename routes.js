@@ -20,15 +20,22 @@ var routes = function (server) {
         var controller = new Guest(req.body);
 
         //check if the referer is correct and if the passed in params are correct
-        if(config.allowedDomains.indexOf(req.header('Referer')) + '/' === -1){
-            res.send(500, 'Cannot save from ' + req.header('Referer'));
+        var referer = req.header('Referer');
+        if(typeof referer === 'undefined' || config.allowedDomains.indexOf(referer) + '/' === -1){
+            res.send(500, 'Cannot save from ' + referer);
         }
         else if(controller.isValid()) {
             try{
                 controller.addGuest(function (err) {
                     if(err !== null){
+                        var message = 'Unable to save record';
                         //there is some error with saving, like duplicate entry
-                        res.send(500, err);
+                        switch(err.code){
+                            case 11000:
+                                message = 'Looks like you have already registered!';
+                                break;
+                        }
+                        res.send(500, message);
                     }
                     //successful entry
                     res.send(200);

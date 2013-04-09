@@ -47,6 +47,20 @@ describe('API', function () {
             });
         });
 
+        it('should respond with meaningful errors in response', function (done) {
+            request(server)
+                .post('/guest')
+                .set('Referer', 'http://www.bethandtyler.com')
+                .send({
+                    lastName: 'last',
+                    emailAddress: 'email@email.com'
+                })
+                .end(function (err, res) {
+                    res.text.should.match(/first\sname/i);
+                    done();
+                });
+        });
+
         it('should respond with 200 when passing valid first name, last name and email', function (done) {
             request(server)
                 .post('/guest')

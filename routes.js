@@ -18,13 +18,14 @@ var routes = function (server) {
      */
     server.post('/guest', function (req, res) {
         var controller = new Guest(req.body);
+        var isValid = controller.isValid();
 
         //check if the referer is correct and if the passed in params are correct
         var referer = req.header('Referer');
         if(typeof referer === 'undefined' || config.allowedDomains.indexOf(referer) + '/' === -1){
             res.send(500, 'Cannot save from ' + referer);
         }
-        else if(controller.isValid()) {
+        else if(isValid){
             try{
                 controller.addGuest(function (err) {
                     if(err !== null){
@@ -46,8 +47,7 @@ var routes = function (server) {
             }
         }
         else{
-            //parameters not valid
-            res.send(500, 'Incorrect parameters');
+            res.send(500, controller.validate());
         }
     });
 };

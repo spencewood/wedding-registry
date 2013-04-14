@@ -28,7 +28,7 @@ describe('API', function () {
                 .expect(500, done);
         });
 
-        it('should respond with 500 when passing validation but failing database entry', function (done) {
+        it('should respond with 409 when passing validation but failing database entry', function (done) {
             //enter the same guest details twice
             var details = {
                 firstName: 'first',
@@ -43,7 +43,7 @@ describe('API', function () {
                     .post('/guest')
                     .set('Referer', 'http://www.bethandtyler.com')
                     .send(details)
-                    .expect(500, done);
+                    .expect(409, done);
             });
         });
 
@@ -98,7 +98,7 @@ describe('API', function () {
                     lastName: 'last',
                     emailAddress: 'email@email.com'
                 })
-                .expect(500, done);
+                .expect(403, done);
         });
     });
 });

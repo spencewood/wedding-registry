@@ -32,9 +32,9 @@ var routes = function (server) {
                         var message = 'Unable to save record';
                         //there is some error with saving, like duplicate entry
                         switch(err.code){
-                            case 11000:
-                                message = 'Looks like you have already registered!';
-                                break;
+                        case 11000:
+                            message = 'Looks like you have already registered!';
+                            break;
                         }
                         res.send(500, message);
                     }

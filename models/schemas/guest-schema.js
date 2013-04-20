@@ -21,7 +21,8 @@ var schema = new mongoose.Schema({
     additionalCount: {
         type: Number,
         default: 0,
-        max: 7
+        max: 7,
+        min: 0
     },
     isAttendingReception: {
         type: Boolean,

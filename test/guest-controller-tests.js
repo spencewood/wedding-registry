@@ -113,6 +113,18 @@ describe('Guest Controller', function () {
             });
         });
 
+        it('should not let you have fewer than zero guests', function (done) {
+            new Controller({
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com',
+                additionalCount: -1
+            }).addGuest(function (err) {
+                should.exist(err);
+                done();
+            });
+        });
+
         it('should take and save the optional message parameter', function (done) {
             new Controller({
                 firstName: 'first',

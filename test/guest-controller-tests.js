@@ -126,6 +126,36 @@ describe('Guest Controller', function () {
                 });
             });
         });
+
+        it('should set the optional attending properties to false by default', function (done) {
+            new Controller({
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com'
+            }).addGuest(function () {
+                Guest.findOne({emailAddress: 'email@email.com'}, function (err, guest) {
+                    guest.isAttendingReception.should.be.false;
+                    guest.isAttendingCeremony.should.be.false;
+                    done();
+                });
+            });
+        });
+
+        it('should be able to set the attending properties to true', function (done) {
+            new Controller({
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com',
+                isAttendingReception: true,
+                isAttendingCeremony: true
+            }).addGuest(function () {
+                Guest.findOne({emailAddress: 'email@email.com'}, function (err, guest) {
+                    guest.isAttendingReception.should.be.true;
+                    guest.isAttendingCeremony.should.be.true;
+                    done();
+                });
+            });
+        });
     });
 
     describe('canStillRegister', function () {

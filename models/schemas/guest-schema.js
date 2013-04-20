@@ -23,6 +23,14 @@ var schema = new mongoose.Schema({
         default: 0,
         max: 7
     },
+    isAttendingReception: {
+        type: Boolean,
+        default: false
+    },
+    isAttendingCeremony: {
+        type: Boolean,
+        default: false
+    },
     message: String
 });
 

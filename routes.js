@@ -6,10 +6,18 @@ var routes = function (server) {
      * Cross-origin for all calls
      */
     server.all('/*', function(req, res, next) {
+        //check if the referer is correct
+        var referer = req.header('Referer');
+        if(typeof referer === 'undefined' || config.allowedDomains.indexOf(referer) + '/' === -1){
+            res.send(403, 'Cannot save from ' + referer);
+        }
+
+        //add cross-domain access if allowed access in config
         if(config.allowedDomains.indexOf(req.headers.origin) >= 0){
             res.header('Access-Control-Allow-Origin', req.headers.origin);
         }
         res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+
         next();
     });
 
@@ -18,14 +26,8 @@ var routes = function (server) {
      */
     server.post('/guest', function (req, res) {
         var controller = new Guest(req.body);
-        var isValid = controller.isValid();
 
-        //check if the referer is correct and if the passed in params are correct
-        var referer = req.header('Referer');
-        if(typeof referer === 'undefined' || config.allowedDomains.indexOf(referer) + '/' === -1){
-            res.send(403, 'Cannot save from ' + referer);
-        }
-        else if(isValid){
+        if(controller.isValid()){
             try{
                 controller.addGuest(function (err) {
                     if(err !== null){

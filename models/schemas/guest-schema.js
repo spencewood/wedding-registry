@@ -7,16 +7,19 @@ var schema = new mongoose.Schema({
     },
     firstName: {
         type: String,
-        trim: true
+        trim: true,
+        required: true
     },
     lastName: {
         type: String,
-        trim: true
+        trim: true,
+        required: true
     },
     emailAddress: {
         type: String,
         unique: true,
-        trim: true
+        trim: true,
+        required: true
     },
     additionalCount: {
         type: Number,

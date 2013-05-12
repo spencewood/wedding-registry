@@ -1,3 +1,10 @@
+if(process.env.NODETIME_ACCOUNT_KEY) {
+    require('nodetime').profile({
+        accountKey: process.env.NODETIME_ACCOUNT_KEY,
+        appName: 'Wedding Registry'
+    });
+}
+
 var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config');

@@ -22,6 +22,8 @@ module.exports = {
     allowedDomains: [
         'http://localhost:4000',
         'http://bethandtyler.com',
-        'http://www.bethandtyler.com'
+        'http://www.bethandtyler.com',
+        'http://tylerandbeth.com',
+        'http://www.tylerandbeth.com'
     ]
 };

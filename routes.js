@@ -25,8 +25,6 @@ var routes = function (server) {
      * Guest
      */
     server.post('/guest', function (req, res) {
-        console.log(req);
-
         var controller = new Guest(req.body);
 
         if(controller.isValid()){

@@ -8,7 +8,7 @@ var routes = function (server) {
     server.all('/*', function(req, res, next) {
         //check if the referer is correct
         var referer = req.header('Referer');
-        if(typeof referer === 'undefined' || config.allowedDomains.indexOf(referer) + '/' === -1){
+        if(typeof referer !== 'undefined' && config.allowedDomains.indexOf(referer) + '/' === -1){
             res.send(403, 'Cannot save from ' + referer);
         }
 

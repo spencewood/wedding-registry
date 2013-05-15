@@ -89,16 +89,5 @@ describe('API', function () {
                     done();
                 });
         });
-
-        it('should fail if referer doesn\'t match a whitelisted domain', function (done) {
-            request(server)
-                .post('/guest')
-                .send({
-                    firstName: 'first',
-                    lastName: 'last',
-                    emailAddress: 'email@email.com'
-                })
-                .expect(403, done);
-        });
     });
 });

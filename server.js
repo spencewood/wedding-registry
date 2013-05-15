@@ -12,7 +12,7 @@ var ie_cors = require('./lib/express-ie-cors');
 
 var server = express();
 server.use(express.bodyParser());
-server.use(ie_cors);
+//server.use(ie_cors);
 var routes = require('./routes')(server);
 
 server.listen(config.port, function () {

@@ -170,6 +170,24 @@ describe('Guest Controller', function () {
         });
     });
 
+    describe('getAll', function () {
+        it('should return the records with a callback', function (done) {
+            var ctrl = new Controller({
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com',
+                isAttendingReception: true,
+                isAttendingCeremony: true
+            });
+            ctrl.addGuest(function () {
+                Controller.getAll(function (err, models) {
+                    models.should.be.instanceOf(Array);
+                    done();
+                });
+            });
+        });
+    });
+
     describe('canStillRegister', function () {
         it('should be true if the date is sometime in April', function () {
             var clock = sinon.useFakeTimers(new Date('04/10/2013').getTime());

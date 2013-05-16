@@ -12,18 +12,18 @@ var clear = function (done) {
 };
 
 describe('API', function () {
-    describe('/guest POST', function () {
-        beforeEach(function (done) {
-            clear(done);
-        });
+    beforeEach(function (done) {
+        clear(done);
+    });
 
-        after(function (done) {
-            clear(done);
-        });
+    after(function (done) {
+        clear(done);
+    });
 
+    describe('/guests POST', function () {
         it('should respond with 500 when not posting valid parameters', function (done) {
             request(server)
-                .post('/guest')
+                .post('/guests')
                 .set('Referer', 'http://www.bethandtyler.com')
                 .expect(500, done);
         });
@@ -40,7 +40,7 @@ describe('API', function () {
 
             guest.save(function () {
                 request(server)
-                    .post('/guest')
+                    .post('/guests')
                     .set('Referer', 'http://www.bethandtyler.com')
                     .send(details)
                     .expect(409, done);
@@ -49,7 +49,7 @@ describe('API', function () {
 
         it('should respond with meaningful errors in response', function (done) {
             request(server)
-                .post('/guest')
+                .post('/guests')
                 .set('Referer', 'http://www.bethandtyler.com')
                 .send({
                     lastName: 'last',
@@ -63,7 +63,7 @@ describe('API', function () {
 
         it('should respond with 200 when passing valid first name, last name and email', function (done) {
             request(server)
-                .post('/guest')
+                .post('/guests')
                 .set('Referer', 'http://www.bethandtyler.com')
                 .send({
                     firstName: 'first',
@@ -76,7 +76,7 @@ describe('API', function () {
         it('should fail if registering late', function (done) {
             var clock = sinon.useFakeTimers(new Date('07/07/2013').getTime());
             request(server)
-                .post('/guest')
+                .post('/guests')
                 .set('Referer', 'http://www.bethandtyler.com')
                 .send({
                     firstName: 'first',
@@ -88,6 +88,16 @@ describe('API', function () {
                     clock.restore();
                     done();
                 });
+        });
+    });
+
+    describe('/guests GET', function () {
+        it('should return json data', function () {
+            request(server)
+                .get('/guests')
+                .set('Referer', 'http://www.bethandtyler.com')
+                .expect('Content-Type', /json/)
+                .expect(200);
         });
     });
 });

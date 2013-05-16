@@ -24,7 +24,7 @@ var routes = function (server) {
     /**
      * Guest
      */
-    server.post('/guest', function (req, res) {
+    server.post('/guests', function (req, res) {
         var controller = new Guest(req.body);
 
         if(controller.isValid()){
@@ -50,6 +50,12 @@ var routes = function (server) {
         else{
             res.send(500, controller.validate());
         }
+    });
+
+    server.get('/guests', function (req, res) {
+        Guest.getAll(function (err, models) {
+            res.json(models);
+        });
     });
 };
 

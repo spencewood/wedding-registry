@@ -59,6 +59,14 @@ GuestController.prototype.addGuest = function (cb) {
 };
 
 /**
+ * Get all guests
+ * @return [{guest}] Array of guests registered
+ */
+ GuestController.getAll = function (cb) {
+    Guest.find({}, cb);
+ };
+
+/**
  * Whether the cutoff time has been reached for RSVP
  * @return {Boolean}
  */

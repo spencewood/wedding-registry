@@ -66,6 +66,20 @@ GuestController.prototype.addGuest = function (cb) {
     Guest.find({}, cb);
  };
 
+ /**
+  * Get total guest count, including additional
+  * @return Number Guest count
+  */
+GuestController.getCount = function (cb) {
+    Guest.find({}, function (err, models) {
+        var additionalTotalCount = models.reduce(function (prev, curr){
+            return prev + curr.additionalCount;
+        }, 0);
+
+        cb(models.length + additionalTotalCount);
+    });
+};
+
 /**
  * Whether the cutoff time has been reached for RSVP
  * @return {Boolean}

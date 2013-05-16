@@ -9,6 +9,14 @@ var clear = function (done) {
 };
 
 describe('Guest Controller', function () {
+    beforeEach(function (done) {
+        clear(done);
+    });
+
+    after(function (done) {
+        clear(done);
+    });
+
     describe('validate', function () {
         it('should be valid with proper details', function () {
             new Controller({
@@ -52,14 +60,6 @@ describe('Guest Controller', function () {
     });
 
     describe('addGuest', function () {
-        beforeEach(function (done) {
-            clear(done);
-        });
-
-        after(function (done) {
-            clear(done);
-        });
-
         it('should add a proper guest', function (done) {
             new Controller({
                 firstName: 'first',
@@ -182,6 +182,22 @@ describe('Guest Controller', function () {
             ctrl.addGuest(function () {
                 Controller.getAll(function (err, models) {
                     models.should.be.instanceOf(Array);
+                    done();
+                });
+            });
+        });
+    });
+
+    describe('getCount', function () {
+        it('should return the correct total count in a callback', function (done) {
+            new Controller({
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com',
+                additionalCount: 3
+            }).addGuest(function () {
+                Controller.getCount(function (count) {
+                    count.should.equal(4);
                     done();
                 });
             });

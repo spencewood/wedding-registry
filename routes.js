@@ -64,6 +64,19 @@ var routes = function (server) {
             res.send(401);
         }
     });
+
+    server.get('/guests/count', function (req, res) {
+        //simple auth
+        if(req.query.password === config.password) {
+            Guest.getCount(function (count) {
+                res.send(count.toString());
+            });
+        }
+        else{
+            //unauthorized
+            res.send(401);
+        }
+    });
 };
 
 module.exports = routes;

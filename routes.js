@@ -1,4 +1,3 @@
-var useragent = require('useragent');
 var Guest = require('./controllers/guest-controller');
 var config = require('./config');
 
@@ -27,15 +26,6 @@ var routes = function (server) {
      */
     server.post('/guest', function (req, res) {
         var controller = new Guest(req.body);
-        var status = '';
-
-        var ua = useragent.lookup(req.headers['user-agent']);
-        //if Internet Explorer
-        if(ua.family === 'IE'){
-            //treat our return status as always 200
-            //so that the error messages can be relayed to the browser
-            status = 200;
-        }
 
         if(controller.isValid()){
             try{
@@ -44,9 +34,9 @@ var routes = function (server) {
                         //there is some error with saving, like duplicate entry
                         switch(err.code){
                         case 11000:
-                            return res.send(status || 409, 'Oops, looks like you have already registered!');
+                            return res.send(409, 'Oops, looks like you have already registered!');
                         default:
-                            return res.send(status || 500, 'Unable to save record');
+                            return res.send(500, 'Unable to save record');
                         }
                     }
                     //successful entry
@@ -54,11 +44,11 @@ var routes = function (server) {
                 });
             }catch(e){
                 //an error has happened with saving to the database, like model validation
-                res.send(status || 500, 'Error saving record');
+                res.send(500, 'Error saving record');
             }
         }
         else{
-            res.send(status || 500, controller.validate());
+            res.send(500, controller.validate());
         }
     });
 };

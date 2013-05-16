@@ -53,9 +53,16 @@ var routes = function (server) {
     });
 
     server.get('/guests', function (req, res) {
-        Guest.getAll(function (err, models) {
-            res.json(models);
-        });
+        //simple auth
+        if(req.query.password === config.password) {
+            Guest.getAll(function (err, models) {
+                res.json(models);
+            });
+        }
+        else{
+            //unauthorized
+            res.send(401);
+        }
     });
 };
 

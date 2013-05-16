@@ -25,5 +25,7 @@ module.exports = {
         'http://www.bethandtyler.com',
         'http://tylerandbeth.com',
         'http://www.tylerandbeth.com'
-    ]
+    ],
+
+    password: process.env.PASSWORD || 'password'
 };

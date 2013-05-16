@@ -6,6 +6,7 @@ var server = express();
 server.use(express.bodyParser());
 var routes = require('../routes')(server);
 var Guest = require('../models/guest-model');
+var config = require('../config');
 
 var clear = function (done) {
     Guest.collection.remove(done);
@@ -92,10 +93,18 @@ describe('API', function () {
     });
 
     describe('/guests GET', function () {
+        it('should return 401 if the password is not correct', function () {
+            request(server)
+                .get('/guests')
+                .set('Referer', 'http://www.bethandtyler.com')
+                .expect(401);
+        });
+
         it('should return json data', function () {
             request(server)
                 .get('/guests')
                 .set('Referer', 'http://www.bethandtyler.com')
+                .send({password: config.password})
                 .expect('Content-Type', /json/)
                 .expect(200);
         });

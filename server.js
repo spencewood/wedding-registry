@@ -11,7 +11,9 @@ var config = require('./config');
 var cors = require('express-ie-cors');
 
 var server = express();
-server.use(cors());
+server.use(cors({
+    contentType: 'application/x-www-form-urlencoded; charset=UTF-8'
+}));
 server.use(express.bodyParser());
 
 

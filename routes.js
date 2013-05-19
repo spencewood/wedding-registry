@@ -1,5 +1,10 @@
+var express = require('express');
 var Guest = require('./controllers/guest-controller');
 var config = require('./config');
+
+var auth = express.basicAuth(function (user, pass) {
+    return (user === 'admin' && pass === config.password);
+}, 'Enter your username and password');
 
 var routes = function (server) {
     /**
@@ -52,30 +57,22 @@ var routes = function (server) {
         }
     });
 
-    server.get('/guests', function (req, res) {
-        //simple auth
-        if(req.query.password === config.password) {
-            Guest.getAll(function (err, models) {
-                res.json(models);
-            });
-        }
-        else{
-            //unauthorized
-            res.send(401);
-        }
+    server.get('/guests', auth, function (req, res) {
+        Guest.getAll(function (err, models) {
+            res.json(models);
+        });
     });
 
-    server.get('/guests/count', function (req, res) {
-        //simple auth
-        if(req.query.password === config.password) {
-            Guest.getCount(function (count) {
-                res.send(count.toString());
-            });
-        }
-        else{
-            //unauthorized
-            res.send(401);
-        }
+    server.get('/guests/receptioncount', auth, function (req, res) {
+        Guest.getReceptionCount(function (count) {
+            res.send(count.toString());
+        });
+    });
+
+    server.get('/guests/ceremonycount', auth, function (req, res) {
+        Guest.getCeremonyCount(function (count) {
+            res.send(count.toString());
+        });
     });
 };
 

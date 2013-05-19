@@ -110,7 +110,23 @@ describe('API', function () {
         });
     });
 
-    describe('/guests/count GET', function () {
+    describe('/guests/receptioncount GET', function () {
+        it('should return 401 if the password is not correct', function () {
+            request(server)
+                .get('/guests/count')
+                .set('Referer', 'http://www.bethandtyler.com')
+                .expect(401);
+        });
+
+        it('should return 200 status when the password is right', function () {
+            request(server)
+                .get('/guests/count')
+                .set('Referer', 'http://www.bethandtyler.com')
+                .expect(200);
+        });
+    });
+
+    describe('/guests/ceremonycount GET', function () {
         it('should return 401 if the password is not correct', function () {
             request(server)
                 .get('/guests/count')

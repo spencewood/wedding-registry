@@ -2,6 +2,13 @@ var email = require('../helpers/email');
 var Guest = require('../models/guest-model');
 var config = require('../config');
 
+
+var getCountAndAdditional = function (models) {
+    return models.reduce(function (prev, curr) {
+        return prev + curr.additionalCount;
+    }, 0) + models.length;
+};
+
 /**
  * The Guest Controller
  * @param {Object} params Parameters that should be persisted
@@ -66,17 +73,23 @@ GuestController.prototype.addGuest = function (cb) {
     Guest.find({}, cb);
  };
 
- /**
-  * Get total guest count, including additional
-  * @return Number Guest count
-  */
-GuestController.getCount = function (cb) {
-    Guest.find({}, function (err, models) {
-        var additionalTotalCount = models.reduce(function (prev, curr){
-            return prev + curr.additionalCount;
-        }, 0);
+/**
+ * Get count of guests attending ceremony
+ * 
+ */
+GuestController.getCeremonyCount = function (cb) {
+    Guest.find({isAttendingCeremony: true}, function (err, models) {
+        cb(getCountAndAdditional(models));
+    });
+};
 
-        cb(models.length + additionalTotalCount);
+/**
+ * Get count of guests attending reception
+ * 
+ */
+GuestController.getReceptionCount = function (cb) {
+    Guest.find({isAttendingReception: true}, function (err, models) {
+        cb(getCountAndAdditional(models));
     });
 };
 

@@ -188,15 +188,33 @@ describe('Guest Controller', function () {
         });
     });
 
-    describe('getCount', function () {
+    describe('getCeremonyCount', function () {
         it('should return the correct total count in a callback', function (done) {
             new Controller({
                 firstName: 'first',
                 lastName: 'last',
                 emailAddress: 'email@email.com',
-                additionalCount: 3
+                additionalCount: 3,
+                isAttendingCeremony: true
             }).addGuest(function () {
-                Controller.getCount(function (count) {
+                Controller.getCeremonyCount(function (count) {
+                    count.should.equal(4);
+                    done();
+                });
+            });
+        });
+    });
+
+    describe('getReceptionCount', function () {
+        it('should return the correct total count in a callback', function (done) {
+            new Controller({
+                firstName: 'first',
+                lastName: 'last',
+                emailAddress: 'email@email.com',
+                additionalCount: 3,
+                isAttendingReception: true
+            }).addGuest(function () {
+                Controller.getReceptionCount(function (count) {
                     count.should.equal(4);
                     done();
                 });

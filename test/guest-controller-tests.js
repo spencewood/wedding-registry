@@ -8,55 +8,13 @@ var clear = function (done) {
     Guest.collection.remove(done);
 };
 
-describe.skip('Guest Controller', function () {
+describe('Guest Controller', function () {
     beforeEach(function (done) {
         clear(done);
     });
 
     after(function (done) {
         clear(done);
-    });
-
-    describe('validate', function () {
-        it('should be valid with proper details', function () {
-            new Controller({
-                firstName: 'first',
-                lastName: 'last',
-                emailAddress: 'email@email.com'
-            }).isValid().should.be.true;
-        });
-
-        it('should not be valid with blank first name', function () {
-            new Controller({
-                firstName: '',
-                lastName: 'last',
-                emailAddress: 'email@email.com'
-            }).isValid().should.be.false;
-        });
-
-        it('should not be valid with blank last name', function () {
-            new Controller({
-                firstName: 'first',
-                lastName: '',
-                emailAddress: 'email@email.com'
-            }).isValid().should.be.false;
-        });
-
-        it('should not be valid with blank email', function () {
-            new Controller({
-                firstName: 'first',
-                lastName: 'last',
-                emailAddress: ''
-            }).isValid().should.be.false;
-        });
-
-        it('should not be valid with an invalid email', function () {
-            new Controller({
-                firstName: 'first',
-                lastName: 'last',
-                emailAddress: 'email'
-            }).isValid().should.be.false;
-        });
     });
 
     describe('addGuest', function () {
@@ -76,14 +34,14 @@ describe.skip('Guest Controller', function () {
                 lastName: 'last',
                 emailAddress: 'email@email.com'
             }).addGuest(function () {
-                (function () {
-                    new Controller({
-                        firstName: 'first',
-                        lastNmae: 'last',
-                        emailAddress: 'email@email.com'
-                    }).addGuest();
-                }).should.throw();
-                done();
+                new Controller({
+                    firstName: 'first',
+                    lastNmae: 'last',
+                    emailAddress: 'email@email.com'
+                }).addGuest(function (err, model) {
+                    should.exist(err);
+                    done();
+                });
             });
         });
 
@@ -164,40 +122,6 @@ describe.skip('Guest Controller', function () {
                 Guest.findOne({emailAddress: 'email@email.com'}, function (err, guest) {
                     guest.isAttendingReception.should.be.true;
                     guest.isAttendingCeremony.should.be.true;
-                    done();
-                });
-            });
-        });
-    });
-
-    describe('getAll', function () {
-        it('should return the records with a callback', function (done) {
-            var ctrl = new Controller({
-                firstName: 'first',
-                lastName: 'last',
-                emailAddress: 'email@email.com',
-                isAttendingReception: true,
-                isAttendingCeremony: true
-            });
-            ctrl.addGuest(function () {
-                Controller.getAll(function (err, models) {
-                    models.should.be.instanceOf(Array);
-                    done();
-                });
-            });
-        });
-    });
-
-    describe('getCount', function () {
-        it('should return the correct total count in a callback', function (done) {
-            new Controller({
-                firstName: 'first',
-                lastName: 'last',
-                emailAddress: 'email@email.com',
-                additionalCount: 3
-            }).addGuest(function () {
-                Controller.getCount(function (count) {
-                    count.should.equal(4);
                     done();
                 });
             });

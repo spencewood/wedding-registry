@@ -25,12 +25,12 @@ GuestController.prototype.isValid = function () {
 GuestController.prototype.addGuest = function (cb) {
     if(this.isValid()){
         var guest = new Guest(this.params);
-        guest.save(function (err, model) {
-            if(err !== null){
-                console.log(err);
-            }
-
-            cb(err, model);
+        guest.save(cb);
+    }
+    else{
+        //error
+        cb({
+            name: 'TooLateError'
         });
     }
 };

@@ -31,7 +31,7 @@ describe('API', function () {
                 .expect(500, done);
         });
 
-        it.skip('should respond with 409 when passing validation but failing database entry', function (done) {
+        it('should respond with 409 when passing validation but failing database entry', function (done) {
             //enter the same guest details twice
             var details = {
                 firstName: 'first',
@@ -50,7 +50,7 @@ describe('API', function () {
             });
         });
 
-        it.skip('should respond with meaningful errors in response', function (done) {
+        it('should respond with meaningful errors in response', function (done) {
             request(server)
                 .post('/guests')
                 .set('Referer', 'http://www.bethandtyler.com')
@@ -64,7 +64,7 @@ describe('API', function () {
                 });
         });
 
-        it.skip('should respond with 200 when passing valid first name, last name and email', function (done) {
+        it('should respond with 200 when passing valid first name, last name and email', function (done) {
             request(server)
                 .post('/guests')
                 .set('Referer', 'http://www.bethandtyler.com')
@@ -76,7 +76,7 @@ describe('API', function () {
                 .expect(200, done);
         });
 
-        it.skip('should fail if registering late', function (done) {
+        it('should fail if registering late', function (done) {
             var clock = sinon.useFakeTimers(new Date('07/07/2013').getTime());
             request(server)
                 .post('/guests')
@@ -94,7 +94,7 @@ describe('API', function () {
         });
     });
 
-    describe.skip('/guests GET', function () {
+    describe('/guests GET', function () {
         it('should return 401 if the password is not correct', function () {
             request(server)
                 .get('/guests')
@@ -112,7 +112,23 @@ describe('API', function () {
         });
     });
 
-    describe('/guests/count GET', function () {
+    describe('/guests/receptioncount GET', function () {
+        it('should return 401 if the password is not correct', function () {
+            request(server)
+                .get('/guests/count')
+                .set('Referer', 'http://www.bethandtyler.com')
+                .expect(401);
+        });
+
+        it('should return 200 status when the password is right', function () {
+            request(server)
+                .get('/guests/count')
+                .set('Referer', 'http://www.bethandtyler.com')
+                .expect(200);
+        });
+    });
+
+    describe('/guests/ceremonycount GET', function () {
         it('should return 401 if the password is not correct', function () {
             request(server)
                 .get('/guests/count')

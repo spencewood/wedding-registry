@@ -10,13 +10,19 @@ var schema = new mongoose.Schema({
         type: String,
         trim: true,
         default: '',
-        validate: [validate({message: 'Must specifiy a first name'}, 'notEmpty')]
+        validate: [
+            validate({message: 'Must specifiy a first name'}, 'notEmpty'),
+            validate({message: 'Must specifiy a first name'}, 'notNull')
+        ]
     },
     lastName: {
         type: String,
         trim: true,
         default: '',
-        validate: [validate({message: 'Must specifiy a last name'}, 'notEmpty')]
+        validate: [
+            validate({message: 'Must specifiy a last name'}, 'notEmpty'),
+            validate({message: 'Must specifiy a last name'}, 'notNull')
+        ]
     },
     emailAddress: {
         type: String,

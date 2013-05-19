@@ -3,6 +3,12 @@ var schema = require('./schemas/guest-schema');
 var config = require('../config').database;
 var db = mongoose.createConnection(config.url);
 
+var getCountAndAdditional = function (models) {
+    return models.reduce(function (prev, curr) {
+        return prev + curr.additionalCount;
+    }, 0) + models.length;
+};
+
 var Guest = db.model('Guest', schema);
 
 /**
@@ -13,17 +19,23 @@ var Guest = db.model('Guest', schema);
     Guest.find({}, cb);
  };
 
- /**
-  * Get total guest count, including additional
-  * @return Number Guest count
-  */
-Guest.getCount = function (cb) {
-    Guest.find({}, function (err, models) {
-        var additionalTotalCount = models.reduce(function (prev, curr){
-            return prev + curr.additionalCount;
-        }, 0);
+/**
+ * Get count of guests attending ceremony
+ * 
+ */
+Guest.getCeremonyCount = function (cb) {
+    Guest.find({isAttendingCeremony: true}, function (err, models) {
+        cb(getCountAndAdditional(models));
+    });
+};
 
-        cb(models.length + additionalTotalCount);
+/**
+ * Get count of guests attending reception
+ * 
+ */
+Guest.getReceptionCount = function (cb) {
+    Guest.find({isAttendingReception: true}, function (err, models) {
+        cb(getCountAndAdditional(models));
     });
 };
 

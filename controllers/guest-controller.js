@@ -11,38 +11,11 @@ var GuestController = function (params) {
 };
 
 /**
- * Validate
- * @return {Bool or String} Returns false if invalid, otherwise returns a string
- */
-GuestController.prototype.validate = function () {
-    if(typeof this.params.firstName === 'undefined' ||
-        this.params.firstName.length === 0) {
-        return 'Must specifiy a first name';
-    }
-
-    if(typeof this.params.lastName === 'undefined' ||
-        this.params.lastName.length === 0) {
-        return 'Must specify a last name';
-    }
-
-    if(typeof this.params.emailAddress === 'undefined' ||
-        this.params.emailAddress.length === 0) {
-        return 'Must specify an email address';
-    }
-
-    if(!email.validate(this.params.emailAddress)) {
-        return 'Invalid email';
-    }
-
-    return false;
-};
-
-/**
  * Returns boolean on whether the passed in parameters are valid
  * @return {Boolean}
  */
 GuestController.prototype.isValid = function () {
-    return !this.validate() && GuestController.canStillRegister();
+    return GuestController.canStillRegister();
 };
 
 /**
@@ -52,32 +25,14 @@ GuestController.prototype.isValid = function () {
 GuestController.prototype.addGuest = function (cb) {
     if(this.isValid()){
         var guest = new Guest(this.params);
-        return guest.save(cb);
+        guest.save(function (err, model) {
+            if(err !== null){
+                console.log(err);
+            }
+
+            cb(err, model);
+        });
     }
-    //if we are this far, the caller should know
-    throw new Error('Invalid');
-};
-
-/**
- * Get all guests
- * @return [{guest}] Array of guests registered
- */
- GuestController.getAll = function (cb) {
-    Guest.find({}, cb);
- };
-
- /**
-  * Get total guest count, including additional
-  * @return Number Guest count
-  */
-GuestController.getCount = function (cb) {
-    Guest.find({}, function (err, models) {
-        var additionalTotalCount = models.reduce(function (prev, curr){
-            return prev + curr.additionalCount;
-        }, 0);
-
-        cb(models.length + additionalTotalCount);
-    });
 };
 
 /**

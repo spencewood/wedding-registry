@@ -1,4 +1,5 @@
-var Guest = require('./controllers/guest-controller');
+var GuestController = require('./controllers/guest-controller');
+var Guest = require('./models/guest-model');
 var config = require('./config');
 
 var routes = function (server) {
@@ -25,31 +26,17 @@ var routes = function (server) {
      * Guest
      */
     server.post('/guests', function (req, res) {
-        var controller = new Guest(req.body);
+        var controller = new GuestController(req.body);
 
-        if(controller.isValid()){
-            try{
-                controller.addGuest(function (err) {
-                    if(err !== null){
-                        //there is some error with saving, like duplicate entry
-                        switch(err.code){
-                        case 11000:
-                            return res.send(409, 'Oops, looks like you have already registered!');
-                        default:
-                            return res.send(500, 'Unable to save record');
-                        }
-                    }
-                    //successful entry
-                    res.send(200);
-                });
-            }catch(e){
-                //an error has happened with saving to the database, like model validation
-                res.send(500, 'Error saving record');
+        controller.addGuest(function (err, model) {
+            if(err !== null){
+                //console.log(err.code, err.message);
             }
-        }
-        else{
-            res.send(500, controller.validate());
-        }
+            else{
+                //successful entry
+                res.send(200);
+            }
+        });
     });
 
     server.get('/guests', function (req, res) {

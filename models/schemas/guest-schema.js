@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var validate = require('mongoose-validator').validate;
 
 var schema = new mongoose.Schema({
     registeredDate: {
@@ -8,18 +9,21 @@ var schema = new mongoose.Schema({
     firstName: {
         type: String,
         trim: true,
-        required: true
+        default: '',
+        validate: [validate({message: 'Must specifiy a first name'}, 'notEmpty')]
     },
     lastName: {
         type: String,
         trim: true,
-        required: true
+        default: '',
+        validate: [validate({message: 'Must specifiy a last name'}, 'notEmpty')]
     },
     emailAddress: {
         type: String,
         unique: true,
         trim: true,
-        required: true
+        default: '',
+        validate: [validate({message: 'Invalid email'}, 'isEmail')]
     },
     additionalCount: {
         type: Number,

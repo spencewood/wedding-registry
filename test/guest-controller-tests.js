@@ -8,7 +8,7 @@ var clear = function (done) {
     Guest.collection.remove(done);
 };
 
-describe('Guest Controller', function () {
+describe.skip('Guest Controller', function () {
     beforeEach(function (done) {
         clear(done);
     });

@@ -11,18 +11,13 @@ var schema = new mongoose.Schema({
         trim: true,
         default: '',
         validate: [
-            validate({message: 'Must specifiy a first name'}, 'notEmpty'),
-            validate({message: 'Must specifiy a first name'}, 'notNull')
-        ]
+            validate({message: 'Must specifiy a first name'}, 'notEmpty')]
     },
     lastName: {
         type: String,
         trim: true,
         default: '',
-        validate: [
-            validate({message: 'Must specifiy a last name'}, 'notEmpty'),
-            validate({message: 'Must specifiy a last name'}, 'notNull')
-        ]
+        validate: [validate({message: 'Must specifiy a last name'}, 'notEmpty')]
     },
     emailAddress: {
         type: String,
@@ -34,8 +29,10 @@ var schema = new mongoose.Schema({
     additionalCount: {
         type: Number,
         default: 0,
-        max: 7,
-        min: 0
+        validate: [
+            validate({message: 'Can\'t have negative guests'}, 'min', 0),
+            validate({message: 'Too many additional guests'}, 'max', 7)
+        ]
     },
     isAttendingReception: {
         type: Boolean,

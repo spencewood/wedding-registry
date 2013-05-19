@@ -75,7 +75,9 @@ var routes = function (server) {
         });
     });
 
-    //Error handling
+    /*
+     * Error handling
+     */
     server.use(function (err, req, res, next) {
         switch(err.name){
         case 'MongoError':

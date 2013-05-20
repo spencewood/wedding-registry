@@ -11,27 +11,19 @@ var GuestController = function (params) {
 };
 
 /**
- * Returns boolean on whether the passed in parameters are valid
- * @return {Boolean}
- */
-GuestController.prototype.isValid = function () {
-    return GuestController.canStillRegister();
-};
-
-/**
  * Add guest
  * @return {guest} The added guest
  */
 GuestController.prototype.addGuest = function (cb) {
-    if(this.isValid()){
+    if(GuestController.canStillRegister()){
         var guest = new Guest(this.params);
         guest.save(cb);
     }
     else{
-        //error
-        cb({
+        //Too late
+        throw {
             name: 'TooLateError'
-        });
+        };
     }
 };
 

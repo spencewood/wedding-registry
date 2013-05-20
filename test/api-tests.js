@@ -3,8 +3,6 @@ var sinon = require('sinon');
 var request = require('supertest');
 var express = require('express');
 var server = express();
-var validator = require('express-validator');
-server.use(validator);
 server.use(express.bodyParser());
 var routes = require('../routes')(server);
 var Guest = require('../models/guest-model');
